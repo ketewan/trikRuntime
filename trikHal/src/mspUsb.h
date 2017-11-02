@@ -1,4 +1,4 @@
-/* Copyright 2015 CyberTech Labs Ltd.
+/* Copyright 2015 Yurii Litvinov and CyberTech Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,20 @@
 
 #pragma once
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
-
-#include "inputDeviceFileInterface.h"
+#include "mspUsbInterface.h"
 
 namespace trikHal {
-namespace stub {
 
-/// Empty implementation of input device file. Only logs operations, returns empty stream.
-class StubInputDeviceFile : public InputDeviceFileInterface
+class MspUsb : public MspUsbInterface
 {
 public:
-	/// Constructor.
-	/// @param fileName - file name (with path, relative or absolute) of a device file.
-	StubInputDeviceFile(const QString &fileName);
+    MspUsb() = default;
+    ~MspUsb() override;
 
-	bool open() override;
-	void close() override;
-	QTextStream &stream() override;
-	void reset() override;
-
-private:
-	QFile mFile;
-	QTextStream mStream;
+	void send(const QByteArray &data) override;
+	int read(const QByteArray &data) override;
+	bool connect() override;
+	void disconnect() override;
 };
 
-}
 }

@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "trikEventFile.h"
+#include "eventFile.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -27,16 +27,16 @@
 #include <QsLog.h>
 #include <trikKernel/timeVal.h>
 
-using namespace trikHal::trik;
+using namespace trikHal;
 
-TrikEventFile::TrikEventFile(const QString &fileName, QThread &thread)
+EventFile::EventFile(const QString &fileName, QThread &thread)
 	: mFileName(fileName)
 	, mThread(thread)
 {
 	moveToThread(&thread);
 }
 
-bool TrikEventFile::open()
+bool EventFile::open()
 {
 	QLOG_INFO() << "Opening" << mFileName;
 
@@ -66,7 +66,7 @@ bool TrikEventFile::open()
 	return true;
 }
 
-void TrikEventFile::tryOpenEventFile()
+void EventFile::tryOpenEventFile()
 {
 	if (mEventFileDescriptor != -1) {
 		return;
@@ -79,7 +79,7 @@ void TrikEventFile::tryOpenEventFile()
 	}
 }
 
-bool TrikEventFile::close()
+bool EventFile::close()
 {
 	if (mEventFileDescriptor == -1) {
 		return false;
@@ -99,17 +99,17 @@ bool TrikEventFile::close()
 	return true;
 }
 
-void TrikEventFile::cancelWaiting()
+void EventFile::cancelWaiting()
 {
 	mInitWaitingLoop->quit();
 }
 
-QString TrikEventFile::fileName() const
+QString EventFile::fileName() const
 {
 	return mFileName;
 }
 
-void TrikEventFile::readFile()
+void EventFile::readFile()
 {
 	struct input_event event;
 	int size = 0;
@@ -130,7 +130,7 @@ void TrikEventFile::readFile()
 	mSocketNotifier->setEnabled(true);
 }
 
-bool TrikEventFile::isOpened() const
+bool EventFile::isOpened() const
 {
 	return mEventFileDescriptor != -1;
 }

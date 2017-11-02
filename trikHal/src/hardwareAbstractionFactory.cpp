@@ -14,11 +14,11 @@
 
 #include "hardwareAbstractionFactory.h"
 
-#include "stubHardwareAbstraction.h"
+#include "hardwareAbstraction.h"
 
 using namespace trikHal;
 
 QSharedPointer<HardwareAbstractionInterface> HardwareAbstractionFactory::create()
 {
-	return QSharedPointer<stub::StubHardwareAbstraction>::create();
+	return QSharedPointer<HardwareAbstraction>::create();
 }

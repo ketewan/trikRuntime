@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "trikSystemConsole.h"
+#include "systemConsole.h"
 
 #include <QtCore/QString>
 #include <QtCore/QProcess>
@@ -20,19 +20,19 @@
 
 #include <QsLog.h>
 
-using namespace trikHal::trik;
+using namespace trikHal;
 
-int TrikSystemConsole::system(const QString &command)
+int systemConsole::system(const QString &command)
 {
 	return ::system(command.toStdString().c_str());
 }
 
-bool TrikSystemConsole::startProcess(const QString &processName, const QStringList &arguments)
+bool systemConsole::startProcess(const QString &processName, const QStringList &arguments)
 {
 	return QProcess::startDetached(processName, arguments);
 }
 
-bool TrikSystemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
+bool systemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
 		, QString * const output)
 {
 	const QFileInfo executableFileInfo(processName);

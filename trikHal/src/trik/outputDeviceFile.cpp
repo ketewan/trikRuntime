@@ -12,34 +12,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "stubOutputDeviceFile.h"
+#include "outputDeviceFile.h"
 
 #include <QsLog.h>
 
-using namespace trikHal::stub;
+using namespace trikHal;
 
-StubOutputDeviceFile::StubOutputDeviceFile(const QString &fileName)
+outputDeviceFile::outputDeviceFile(const QString &fileName)
 	: mFile(fileName)
 {
 }
 
-bool StubOutputDeviceFile::open()
+bool outputDeviceFile::open()
 {
-	QLOG_INFO() << "Opening stub output device file" << mFile.fileName();
+	QLOG_INFO() << "Opening output device file" << mFile.fileName();
+
+	if (!mFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered | QIODevice::Text)) {
+		QLOG_ERROR() << "File" << mFile.fileName() << " failed to open for writing";
+		return false;
+	}
+
 	return true;
 }
 
-void StubOutputDeviceFile::close()
+void outputDeviceFile::close()
 {
-	QLOG_INFO() << "Closing stub output device file" << mFile.fileName();
+	if (mFile.isOpen()) {
+		QLOG_INFO() << "Closing output device file" << mFile.fileName();
+		mFile.close();
+	}
 }
 
-void StubOutputDeviceFile::write(const QString &data)
+void outputDeviceFile::write(const QString &data)
 {
-	QLOG_INFO() << "Writing to stub output device file" << mFile.fileName() << ":" << data;
+	mFile.write(data.toUtf8());
+	mFile.flush();
 }
 
-QString StubOutputDeviceFile::fileName() const
+QString outputDeviceFile::fileName() const
 {
 	return mFile.fileName();
 }

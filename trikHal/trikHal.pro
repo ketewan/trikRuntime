@@ -14,6 +14,8 @@
 
 include(../global.pri)
 
+INCLUDEPATH += $$PWD/src
+
 PUBLIC_HEADERS += \
 	$$PWD/include/trikHal/declSpec.h \
 	$$PWD/include/trikHal/hardwareAbstractionInterface.h \
@@ -26,57 +28,58 @@ PUBLIC_HEADERS += \
 	$$PWD/include/trikHal/outputDeviceFileInterface.h \
 	$$PWD/include/trikHal/systemConsoleInterface.h \
 
-!win32:!macx {
+HEADERS += \
+	$$PWD/src/hardwareAbstraction.h \
+	$$PWD/src/mspI2c.h \
+	$$PWD/src/mspUsb.h \
+	$$PWD/src/systemConsole.h \
+	$$PWD/src/eventFile.h \
+	$$PWD/src/inputDeviceFile.h \
+	$$PWD/src/outputDeviceFile.h \
+	$$PWD/src/fifo.h \
+
+SOURCES += \
+	$$PWD/src/hardwareAbstractionFactory.cpp \
+
+equals(ARCHITECTURE, arm) {
 	HEADERS += \
-		$$PWD/src/trik/trikHardwareAbstraction.h \
-		$$PWD/src/trik/trikMspI2c.h \
-		$$PWD/src/trik/trikMspUsb.h \
-		$$PWD/src/trik/trikSystemConsole.h \
-		$$PWD/src/trik/trikEventFile.h \
-		$$PWD/src/trik/trikInputDeviceFile.h \
-		$$PWD/src/trik/trikOutputDeviceFile.h \
-		$$PWD/src/trik/trikFifo.h \
 		$$PWD/src/trik/usbMsp/usbMSP430Interface.h \
 		$$PWD/src/trik/usbMsp/usbMSP430Defines.h \
-}
 
-HEADERS += \
-	$$PWD/src/stub/stubHardwareAbstraction.h \
-	$$PWD/src/stub/stubMspI2c.h \
-	$$PWD/src/stub/stubMspUsb.h \
-	$$PWD/src/stub/stubSystemConsole.h \
-	$$PWD/src/stub/stubEventFile.h \
-	$$PWD/src/stub/stubInputDeviceFile.h \
-	$$PWD/src/stub/stubOutputDeviceFile.h \
-	$$PWD/src/stub/stubFifo.h \
-
-!win32:!macx {
 	SOURCES += \
-		$$PWD/src/trik/trikHardwareAbstraction.cpp \
-		$$PWD/src/trik/trikMspI2c.cpp \
-		$$PWD/src/trik/trikMspUsb.cpp \
-		$$PWD/src/trik/trikSystemConsole.cpp \
-		$$PWD/src/trik/trikEventFile.cpp \
-		$$PWD/src/trik/trikInputDeviceFile.cpp \
-		$$PWD/src/trik/trikOutputDeviceFile.cpp \
-		$$PWD/src/trik/trikFifo.cpp \
+		$$PWD/src/trik/hardwareAbstraction.cpp \
+		$$PWD/src/trik/mspI2c.cpp \
+		$$PWD/src/trik/mspUsb.cpp \
+		$$PWD/src/trik/systemConsole.cpp \
+		$$PWD/src/trik/eventFile.cpp \
+		$$PWD/src/trik/inputDeviceFile.cpp \
+		$$PWD/src/trik/outputDeviceFile.cpp \
+		$$PWD/src/trik/fifo.cpp \
 		$$PWD/src/trik/usbMsp/usbMSP430Interface.cpp \
 }
 
-SOURCES += \
-	$$PWD/src/stub/stubHardwareAbstraction.cpp \
-	$$PWD/src/stub/stubMspI2c.cpp \
-	$$PWD/src/stub/stubMspUsb.cpp \
-	$$PWD/src/stub/stubSystemConsole.cpp \
-	$$PWD/src/stub/stubEventFile.cpp \
-	$$PWD/src/stub/stubInputDeviceFile.cpp \
-	$$PWD/src/stub/stubOutputDeviceFile.cpp \
-	$$PWD/src/stub/stubFifo.cpp \
+else:unix {
+	SOURCES += \
+		$$PWD/src/stub/hardwareAbstraction.cpp \
+		$$PWD/src/stub/mspI2c.cpp \
+		$$PWD/src/stub/mspUsb.cpp \
+		$$PWD/src/stub/systemConsole.cpp \
+		$$PWD/src/stub/eventFile.cpp \
+		$$PWD/src/stub/inputDeviceFile.cpp \
+		$$PWD/src/stub/outputDeviceFile.cpp \
+		$$PWD/src/trik/fifo.cpp \
+}
 
-equals(ARCHITECTURE, arm) {
-	SOURCES += $$PWD/src/trik/hardwareAbstractionFactory.cpp
-} else {
-	SOURCES += $$PWD/src/stub/hardwareAbstractionFactory.cpp
+else {
+	SOURCES += \
+		$$PWD/src/stub/hardwareAbstraction.cpp \
+		$$PWD/src/stub/mspI2c.cpp \
+		$$PWD/src/stub/mspUsb.cpp \
+		$$PWD/src/stub/systemConsole.cpp \
+		$$PWD/src/stub/eventFile.cpp \
+		$$PWD/src/stub/inputDeviceFile.cpp \
+		$$PWD/src/stub/outputDeviceFile.cpp \
+		$$PWD/src/stub/fifo.cpp \
 }
 
 TEMPLATE = lib

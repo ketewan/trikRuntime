@@ -1,4 +1,4 @@
-/* Copyright 2015 CyberTech Labs Ltd.
+/* Copyright 2015 Yurii Litvinov and CyberTech Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,30 +12,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "stubMspUsb.h"
+#pragma once
 
-#include <QsLog.h>
+#include "systemConsoleInterface.h"
 
-using namespace trikHal::stub;
+namespace trikHal {
 
-void StubMspUsb::send(const QByteArray &data)
+class SystemConsole : public SystemConsoleInterface
 {
-	QLOG_INFO() << "Sending thru MSP USB stub" << data;
-}
+public:
+	int system(const QString &command) override;
+	bool startProcess(const QString &processName, const QStringList &arguments) override;
+	bool startProcessSynchronously(const QString &processName, const QStringList &arguments
+			, QString * const output = nullptr) override;
+};
 
-int StubMspUsb::read(const QByteArray &data)
-{
-	QLOG_INFO() << "Reading from MSP USB stub" << data;
-	return 0;
-}
-
-bool StubMspUsb::connect()
-{
-	QLOG_INFO() << "Connecting to MSP USB stub";
-	return true;
-}
-
-void StubMspUsb::disconnect()
-{
-	QLOG_INFO() << "Disconnecting from MSP USB stub";
 }

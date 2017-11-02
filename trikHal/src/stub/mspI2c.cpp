@@ -12,30 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "stubMspI2c.h"
+#include "mspI2c.h"
 
 #include <QsLog.h>
 
-using namespace trikHal::stub;
+using namespace trikHal;
 
-void StubMspI2C::send(const QByteArray &data)
+void MspI2c::send(const QByteArray &data)
 {
 	QLOG_INFO() << "Sending thru MSP I2C stub" << data;
 }
 
-int StubMspI2C::read(const QByteArray &data)
+int MspI2c::read(const QByteArray &data)
 {
 	QLOG_INFO() << "Reading from MSP I2C stub" << data;
 	return 0;
 }
 
-bool StubMspI2C::connect(const QString &devicePath, int deviceId)
+bool MspI2c::connect(const QString &devicePath, int deviceId)
 {
 	QLOG_INFO() << "Connecting to MSP I2C stub, devicePath:" << devicePath << "deviceId" << deviceId;
 	return true;
 }
 
-void StubMspI2C::disconnect()
+void MspI2c::disconnect()
 {
 	QLOG_INFO() << "Disconnecting from MSP I2C stub";
+}
+
+MspI2c::~MspI2c()
+{
 }

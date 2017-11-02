@@ -1,4 +1,4 @@
-/* Copyright 2015 Yurii Litvinov and CyberTech Labs Ltd.
+/* Copyright 2015 CyberTech Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "hardwareAbstractionFactory.h"
+#pragma once
 
-#include "trikHardwareAbstraction.h"
+#include <QtCore/QString>
+#include <QtCore/QFile>
 
-using namespace trikHal;
+#include "inputDeviceFileInterface.h"
 
-QSharedPointer<HardwareAbstractionInterface> HardwareAbstractionFactory::create()
+namespace trikHal {
+
+class InputDeviceFile : public InputDeviceFileInterface
 {
-	return QSharedPointer<trik::TrikHardwareAbstraction>::create();
+public:
+	/// Constructor.
+	/// @param fileName - name of a device file .
+    InputDeviceFile(const QString &fileName);
+
+	bool open() override;
+	void close() override;
+	QTextStream &stream() override;
+	void reset() override;
+
+private:
+	/// Underlying file.
+	QFile mFile;
+
+	/// Stream used to read from a file.
+	QTextStream mStream;
+};
+
 }

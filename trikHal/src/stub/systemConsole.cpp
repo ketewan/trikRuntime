@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "stubSystemConsole.h"
+#include "systemConsole.h"
 
 #include <QtCore/QString>
 #include <QtCore/QProcess>
@@ -20,21 +20,21 @@
 
 #include <QsLog.h>
 
-using namespace trikHal::stub;
+using namespace trikHal;
 
-int StubSystemConsole::system(const QString &command)
+int SystemConsole::system(const QString &command)
 {
 	QLOG_INFO() << "Calling stub system console with command:" << command;
 	return 0;
 }
 
-bool StubSystemConsole::startProcess(const QString &processName, const QStringList &arguments)
+bool SystemConsole::startProcess(const QString &processName, const QStringList &arguments)
 {
 	QLOG_INFO() << "Stub asked to start process" << processName << "with arguments" << arguments;
 	return true;
 }
 
-bool StubSystemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
+bool SystemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
 		, QString * const output)
 {
 	QLOG_INFO() << "Stub asked to synchronously start process" << processName << "with arguments" << arguments;

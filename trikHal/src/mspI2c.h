@@ -17,14 +17,12 @@
 #include "mspI2cInterface.h"
 
 namespace trikHal {
-namespace trik {
 
-/// Real implementation of I2C bus communicator.
-class TrikMspI2c : public MspI2cInterface
+class MspI2c : public MspI2cInterface
 {
 public:
-	TrikMspI2c() = default;
-	~TrikMspI2c() override;
+    MspI2c() = default;
+    ~MspI2c() override;
 
 	void send(const QByteArray &data) override;
 	int read(const QByteArray &data) override;
@@ -36,5 +34,4 @@ private:
 	int mDeviceFileDescriptor = -1;
 };
 
-}
 }

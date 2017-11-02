@@ -12,30 +12,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "trikMspUsb.h"
+#include "mspUsb.h"
 
 #include "usbMsp/usbMSP430Defines.h"
 #include "usbMsp/usbMSP430Interface.h"
 
 #include <QsLog.h>
 
-using namespace trikHal::trik;
+using namespace trikHal;
 
-TrikMspUsb::~TrikMspUsb()
+mspUsb::~mspUsb()
 {
 }
 
-void TrikMspUsb::send(const QByteArray &data)
+void mspUsb::send(const QByteArray &data)
 {
 	send_USBMSP(data);
 }
 
-int TrikMspUsb::read(const QByteArray &data)
+int mspUsb::read(const QByteArray &data)
 {
 	return read_USBMSP(data);
 }
 
-bool TrikMspUsb::connect()
+bool mspUsb::connect()
 {
 #ifndef I_UNDERSTAND_ALL_RISKS
 	return false;
@@ -50,7 +50,7 @@ bool TrikMspUsb::connect()
 #endif /* I_UNDERSTAND_ALL_RISKS */
 }
 
-void TrikMspUsb::disconnect()
+void mspUsb::disconnect()
 {
 	disconnect_USBMSP();
 }

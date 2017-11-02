@@ -19,14 +19,12 @@
 #include <QtCore/QScopedPointer>
 
 namespace trikHal {
-namespace trik {
 
-/// Hardware abstraction layer for a real robot.
-class TrikHardwareAbstraction : public HardwareAbstractionInterface
+class HardwareAbstraction : public HardwareAbstractionInterface
 {
 public:
-	TrikHardwareAbstraction();
-	~TrikHardwareAbstraction() override;
+    HardwareAbstraction();
+    ~HardwareAbstraction() override;
 
 	MspI2cInterface &mspI2c() override;
 	MspUsbInterface &mspUsb() override;
@@ -48,5 +46,4 @@ private:
 	QScopedPointer<SystemConsoleInterface> mSystemConsole;
 };
 
-}
 }

@@ -12,30 +12,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#pragma once
+#include "eventFile.h"
 
-#include "fifoInterface.h"
+#include <QsLog.h>
 
-namespace trikHal {
-namespace stub {
+using namespace trikHal;
 
-/// Empty implementation of Linux FIFO. Does not emit any events, only logs operations.
-class StubFifo : public FifoInterface
+EventFile::EventFile(const QString &fileName, QThread &thread)
+	: mFileName(fileName)
+	, mThread(thread)
 {
-	Q_OBJECT
-
-public:
-	/// Constructor.
-	/// @param fileName - FIFO file name.
-	StubFifo(const QString &fileName);
-
-	bool open() override;
-	bool close() override;
-	QString fileName() override;
-
-public:
-	const QString mFileName;
-};
-
 }
+
+bool EventFile::open()
+{
+	QLOG_INFO() << "Opening stub:" << mFileName;
+	return true;
+}
+
+bool EventFile::close()
+{
+	QLOG_INFO() << "Closing stub:" << mFileName;
+	return true;
+}
+
+void EventFile::cancelWaiting()
+{
+}
+
+QString EventFile::fileName() const
+{
+	return mFileName;
+}
+
+bool EventFile::isOpened() const
+{
+	return true;
+}
+
+void EventFile::tryOpenEventFile()
+{
+}
+
+void EventFile::readFile()
+{
 }

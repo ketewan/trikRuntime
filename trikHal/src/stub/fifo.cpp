@@ -12,22 +12,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#pragma once
+#include "fifo.h"
 
-#include "systemConsoleInterface.h"
+#include <QsLog.h>
 
-namespace trikHal {
-namespace stub {
+using namespace trikHal;
 
-/// Empty implementation of system console. Only logs operations, returns empty string as process output.
-class StubSystemConsole : public SystemConsoleInterface
+Fifo::Fifo(const QString &fileName)
+	: mFileName(fileName)
 {
-public:
-	int system(const QString &command) override;
-	bool startProcess(const QString &processName, const QStringList &arguments) override;
-	bool startProcessSynchronously(const QString &processName, const QStringList &arguments
-			, QString * const output = nullptr) override;
-};
-
 }
+
+bool Fifo::open()
+{
+	QLOG_INFO() << "Opening stub fifo" << mFileName;
+	return true;
+}
+
+bool Fifo::close()
+{
+	QLOG_INFO() << "Closing stub fifo" << mFileName;
+	return true;
+}
+
+QString Fifo::fileName()
+{
+	return mFileName;
+}
+
+Fifo::~Fifo()
+{
+}
+
+void Fifo::readFile()
+{
 }

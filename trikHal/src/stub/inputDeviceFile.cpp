@@ -12,32 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#pragma once
+#include "inputDeviceFile.h"
 
-#include "eventFileInterface.h"
+#include <QsLog.h>
 
-namespace trikHal {
-namespace stub {
+using namespace trikHal;
 
-/// Empty implementation of event file, it only logs calls to its methods and doen't emit any signals.
-class StubEventFile : public EventFileInterface
+InputDeviceFile::InputDeviceFile(const QString &fileName)
+	: mFile(fileName), mStream("")
 {
-	Q_OBJECT
-
-public:
-	/// Constructor.
-	/// @param fileName - file name (with path, relative or absolute) of an event file.
-	StubEventFile(const QString &fileName);
-
-	bool open() override;
-	bool close() override;
-	void cancelWaiting() override;
-	QString fileName() const override;
-	bool isOpened() const override;
-
-private:
-	QString mFileName;
-};
-
 }
+
+bool InputDeviceFile::open()
+{
+	QLOG_INFO() << "Opening stub input device file" << mFile.fileName();
+	return true;
+}
+
+void InputDeviceFile::close()
+{
+	QLOG_INFO() << "Closing stub input device file" << mFile.fileName();
+}
+
+QTextStream &InputDeviceFile::stream()
+{
+	return mStream;
+}
+
+void InputDeviceFile::reset()
+{
+	QLOG_INFO() << "Resetting stub input device file" << mFile.fileName();
 }

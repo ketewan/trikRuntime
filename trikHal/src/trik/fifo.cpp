@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "trikFifo.h"
+#include "fifo.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -23,20 +23,20 @@
 
 #include <QsLog.h>
 
-using namespace trikHal::trik;
+using namespace trikHal;
 
-TrikFifo::TrikFifo(const QString &fileName)
+Fifo::Fifo(const QString &fileName)
 	: mFileName(fileName)
 	, mFileDescriptor(-1)
 {
 }
 
-TrikFifo::~TrikFifo()
+Fifo::~Fifo()
 {
 	close();
 }
 
-bool TrikFifo::open()
+bool Fifo::open()
 {
 	mFileDescriptor = ::open(mFileName.toStdString().c_str(), O_RDONLY, O_NONBLOCK);
 
@@ -54,7 +54,7 @@ bool TrikFifo::open()
 	return true;
 }
 
-void TrikFifo::readFile()
+void Fifo::readFile()
 {
 	char data[4000] = {0};
 
@@ -82,7 +82,7 @@ void TrikFifo::readFile()
 	mSocketNotifier->setEnabled(true);
 }
 
-bool TrikFifo::close()
+bool Fifo::close()
 {
 	if (mFileDescriptor != -1) {
 		bool result = ::close(mFileDescriptor) == 0;
@@ -93,7 +93,7 @@ bool TrikFifo::close()
 	return false;
 }
 
-QString TrikFifo::fileName()
+QString Fifo::fileName()
 {
 	return mFileName;
 }

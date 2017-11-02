@@ -1,4 +1,4 @@
-/* Copyright 2015 Yurii Litvinov and CyberTech Labs Ltd.
+/* Copyright 2015 CyberTech Labs Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,34 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#include "stubInputDeviceFile.h"
+#include "mspUsb.h"
 
 #include <QsLog.h>
 
-using namespace trikHal::stub;
+using namespace trikHal;
 
-StubInputDeviceFile::StubInputDeviceFile(const QString &fileName)
-	: mFile(fileName), mStream("")
+void MspUsb::send(const QByteArray &data)
 {
+	QLOG_INFO() << "Sending thru MSP USB stub" << data;
 }
 
-bool StubInputDeviceFile::open()
+int MspUsb::read(const QByteArray &data)
 {
-	QLOG_INFO() << "Opening stub input device file" << mFile.fileName();
+	QLOG_INFO() << "Reading from MSP USB stub" << data;
+	return 0;
+}
+
+bool MspUsb::connect()
+{
+	QLOG_INFO() << "Connecting to MSP USB stub";
 	return true;
 }
 
-void StubInputDeviceFile::close()
+void MspUsb::disconnect()
 {
-	QLOG_INFO() << "Closing stub input device file" << mFile.fileName();
+	QLOG_INFO() << "Disconnecting from MSP USB stub";
 }
 
-QTextStream &StubInputDeviceFile::stream()
+MspUsb::~MspUsb()
 {
-	return mStream;
-}
-
-void StubInputDeviceFile::reset()
-{
-	QLOG_INFO() << "Resetting stub input device file" << mFile.fileName();
 }

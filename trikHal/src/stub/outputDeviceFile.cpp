@@ -12,22 +12,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. */
 
-#pragma once
+#include "outputDeviceFile.h"
 
-#include "systemConsoleInterface.h"
+#include <QsLog.h>
 
-namespace trikHal {
-namespace trik {
+using namespace trikHal;
 
-/// Real implementation of system console.
-class TrikSystemConsole : public SystemConsoleInterface
+OutputDeviceFile::OutputDeviceFile(const QString &fileName)
+	: mFile(fileName)
 {
-public:
-	int system(const QString &command) override;
-	bool startProcess(const QString &processName, const QStringList &arguments) override;
-	bool startProcessSynchronously(const QString &processName, const QStringList &arguments
-			, QString * const output = nullptr) override;
-};
-
 }
+
+bool OutputDeviceFile::open()
+{
+	QLOG_INFO() << "Opening stub output device file" << mFile.fileName();
+	return true;
+}
+
+void OutputDeviceFile::close()
+{
+	QLOG_INFO() << "Closing stub output device file" << mFile.fileName();
+}
+
+void OutputDeviceFile::write(const QString &data)
+{
+	QLOG_INFO() << "Writing to stub output device file" << mFile.fileName() << ":" << data;
+}
+
+QString OutputDeviceFile::fileName() const
+{
+	return mFile.fileName();
 }

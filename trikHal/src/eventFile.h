@@ -20,12 +20,9 @@
 
 #include "eventFileInterface.h"
 
-
 namespace trikHal {
-namespace trik {
 
-/// Real implementation of event file.
-class TrikEventFile : public EventFileInterface
+class EventFile : public EventFileInterface
 {
 	Q_OBJECT
 
@@ -33,8 +30,10 @@ public:
 	/// Constructor.
 	/// @param fileName - file name (with path, relative or absolute) of an event file.
 	/// @param thread - background thread where all socket events will be processed.
-	TrikEventFile(const QString &fileName, QThread &thread);
-	~TrikEventFile() override {}
+
+//    EventFile(const QString &fileName);
+    EventFile(const QString &fileName, QThread &thread);
+    ~EventFile() override {}
 
 	bool open() override;
 	bool close() override;
@@ -67,5 +66,4 @@ private:
 	QScopedPointer<QSocketNotifier> mSocketNotifier;
 };
 
-}
 }

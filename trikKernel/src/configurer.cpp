@@ -52,14 +52,14 @@ Configurer::Configurer(const QString &systemConfigFileName, const QString &model
 	mVersion = systemConfig.attribute("version", "");
 
 	parseSection("deviceClasses", [this](const QDomElement &element) { parseDeviceClasses(element); });
-	parseSection("devicePorts", [this](const QDomElement &element) { parseDevicePorts(element); });
-	parseSection("deviceTypes", [this](const QDomElement &element) { parseDeviceTypes(element); });
+    parseSection("devicePorts", [this](const QDomElement &element) { parseDevicePorts(element); });
+    parseSection("deviceTypes", [this](const QDomElement &element) { parseDeviceTypes(element); });
 
 	parseSection("initScript", [this](const QDomElement &element) { parseInitScript(element); });
 
 	parseAdditionalConfigurations(systemConfig);
 
-	parseModelConfig(modelConfig);
+    parseModelConfig(modelConfig);
 }
 
 QString Configurer::attributeByDevice(const QString &deviceClass, const QString &attributeName) const

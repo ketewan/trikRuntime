@@ -63,7 +63,7 @@ else:unix {
 		$$PWD/src/stub/hardwareAbstraction.cpp \
 		$$PWD/src/stub/mspI2c.cpp \
 		$$PWD/src/stub/mspUsb.cpp \
-		$$PWD/src/stub/systemConsole.cpp \
+                $$PWD/src/trik/systemConsole.cpp \
 		$$PWD/src/stub/eventFile.cpp \
 		$$PWD/src/stub/inputDeviceFile.cpp \
 		$$PWD/src/stub/outputDeviceFile.cpp \

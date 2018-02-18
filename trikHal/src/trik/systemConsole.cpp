@@ -22,17 +22,17 @@
 
 using namespace trikHal;
 
-int systemConsole::system(const QString &command)
+int SystemConsole::system(const QString &command)
 {
 	return ::system(command.toStdString().c_str());
 }
 
-bool systemConsole::startProcess(const QString &processName, const QStringList &arguments)
+bool SystemConsole::startProcess(const QString &processName, const QStringList &arguments)
 {
 	return QProcess::startDetached(processName, arguments);
 }
 
-bool systemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
+bool SystemConsole::startProcessSynchronously(const QString &processName, const QStringList &arguments
 		, QString * const output)
 {
 	const QFileInfo executableFileInfo(processName);

@@ -38,7 +38,7 @@ Fifo::~Fifo()
 
 bool Fifo::open()
 {
-	mFileDescriptor = ::open(mFileName.toStdString().c_str(), O_RDONLY, O_NONBLOCK);
+    mFileDescriptor = ::open(mFileName.toStdString().c_str(), O_RDONLY | O_NONBLOCK);
 
 	if (mFileDescriptor == -1) {
 		QLOG_ERROR() << "Can't open FIFO file" << mFileName;
@@ -56,17 +56,27 @@ bool Fifo::open()
 
 void Fifo::readFile()
 {
-	char data[4000] = {0};
+    std::printf("trik read\n");
+    std::fflush(stdout);
+    constexpr int BUFSIZE = 400;
+    char data[BUFSIZE];// = {0};
 
 	mSocketNotifier->setEnabled(false);
+    int bytesRead;
+    while ((bytesRead = ::read(mFileDescriptor, &data, BUFSIZE - 1)) > 0) {
+        data[bytesRead] = 0;
+        mBuffer += data;
+    }
 
-	if (::read(mFileDescriptor, &data, 4000) < 0) {
-		QLOG_ERROR() << "FIFO read failed: " << strerror(errno);
-		emit readError();
-		return;
+    if ( bytesRead < 0) {
+        if (errno != EAGAIN) {
+            QLOG_ERROR() << "FIFO read failed: " << strerror(errno);
+            emit readError();
+            return;
+         } else {
+            // Skip EAGAIN error for non-blocking FIFO
+         }
 	}
-
-	mBuffer += data;
 
 	if (mBuffer.contains("\n")) {
 		QStringList lines = mBuffer.split('\n', QString::KeepEmptyParts);

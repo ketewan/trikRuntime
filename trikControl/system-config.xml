@@ -23,17 +23,17 @@ equal to its class name.
 <config version="model-2015" >
 	<!-- Initialization sh script, will be executed when runtime is launched. -->
 	<initScript>
-		echo 0 > /sys/class/misc/l3g42xxd/fs_selection
-		echo 2 > /sys/class/misc/l3g42xxd/odr_selection
 
-		echo 1 > /sys/class/gpio/gpio62/value
+		if test -d etc/trik; then echo 1 > /sys/class/gpio/gpio62/value ; fi
 
-		echo 1 > /sys/class/pwm/ehrpwm.1:1/request
-		echo 1 > /sys/class/pwm/ehrpwm.1:0/request
-		echo 1 > /sys/class/pwm/ehrpwm.0:1/request
-		echo 1 > /sys/class/pwm/ecap.0/request
-		echo 1 > /sys/class/pwm/ecap.1/request
-		echo 1 > /sys/class/pwm/ecap.2/request
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ehrpwm.1:1/request ; fi
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ehrpwm.1:0/request ; fi
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ehrpwm.0:1/request ; fi
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ecap.0/request ; fi
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ecap.1/request ; fi
+		if test -d etc/trik; then echo 1 > /sys/class/pwm/ecap.2/request ; fi
+
+		/home/arsonist/trikRuntime/bin/x86-release/start_sensor.sh &amp;
 
 		#cat /sys/class/pwm/ecap_cap.0/config > /dev/null
 		#cat /sys/class/pwm/ecap_cap.1/config > /dev/null
@@ -147,7 +147,7 @@ equal to its class name.
 		<objectSensor port="video2" />
 		<colorSensor port="video1" />
 		<colorSensor port="video2" />
-		<fifo port="soundSensor" file="/home/root/trik/soundSensor.fifo" />
+		<fifo port="soundSensor" file="/home/arsonist/trikRuntime/bin/x86-release/soundSensor.fifo" />
 	</devicePorts>
 
 	<deviceTypes>

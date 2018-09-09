@@ -21,6 +21,7 @@ PUBLIC_HEADERS += \
 	$$PWD/include/trikHal/hardwareAbstractionInterface.h \
 	$$PWD/include/trikHal/hardwareAbstractionFactory.h \
 	$$PWD/include/trikHal/fifoInterface.h \
+        $$PWD/include/trikHal/nanomsgInterface.h \
 	$$PWD/include/trikHal/eventFileInterface.h \
 	$$PWD/include/trikHal/inputDeviceFileInterface.h \
 	$$PWD/include/trikHal/mspI2cInterface.h \
@@ -37,9 +38,10 @@ HEADERS += \
 	$$PWD/src/inputDeviceFile.h \
 	$$PWD/src/outputDeviceFile.h \
 	$$PWD/src/fifo.h \
+        $$PWD/src/nanomsg.h \
 
 SOURCES += \
-	$$PWD/src/hardwareAbstractionFactory.cpp \
+        $$PWD/src/hardwareAbstractionFactory.cpp \
 
 equals(ARCHITECTURE, arm) {
 	HEADERS += \
@@ -55,6 +57,7 @@ equals(ARCHITECTURE, arm) {
 		$$PWD/src/trik/inputDeviceFile.cpp \
 		$$PWD/src/trik/outputDeviceFile.cpp \
 		$$PWD/src/trik/fifo.cpp \
+                $$PWD/src/trik/nanomsg.cpp \
 		$$PWD/src/trik/usbMsp/usbMSP430Interface.cpp \
 }
 
@@ -68,6 +71,7 @@ else:unix {
 		$$PWD/src/stub/inputDeviceFile.cpp \
 		$$PWD/src/stub/outputDeviceFile.cpp \
 		$$PWD/src/trik/fifo.cpp \
+                $$PWD/src/trik/nanomsg.cpp \
 }
 
 else {
@@ -80,11 +84,14 @@ else {
 		$$PWD/src/stub/inputDeviceFile.cpp \
 		$$PWD/src/stub/outputDeviceFile.cpp \
 		$$PWD/src/stub/fifo.cpp \
+                $$PWD/src/stub/nanomsg.cpp \
 }
 
 TEMPLATE = lib
 
 DEFINES += TRIKHAL_LIBRARY
+
+LIBS += -lnanomsg
 
 links(trikKernel)
 implementationIncludes(trikKernel)

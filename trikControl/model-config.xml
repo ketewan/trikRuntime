@@ -125,9 +125,13 @@ Note that device, even if listed here, may fail by itself, then it also will not
 	<mailbox />
 
 	<!-- Example of custom FIFO sensor -->
-	<!--
-	<soundSensor>
+
+        <soundSensor>
 		<fifo />
 	</soundSensor>
-	-->
+
+        <nmsgSoundSensor>
+	        <nanomsg />
+	</nmsgSoundSensor>
+
 </config>

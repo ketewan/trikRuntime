@@ -56,8 +56,6 @@ bool Fifo::open()
 
 void Fifo::readFile()
 {
-    std::printf("trik read\n");
-    std::fflush(stdout);
     constexpr int BUFSIZE = 400;
     char data[BUFSIZE];// = {0};
 

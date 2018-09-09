@@ -21,6 +21,7 @@
 #include "inputDeviceFile.h"
 #include "outputDeviceFile.h"
 #include "fifo.h"
+#include "nanomsg.h"
 
 using namespace trikHal;
 
@@ -58,6 +59,11 @@ EventFileInterface *HardwareAbstraction::createEventFile(const QString &fileName
 FifoInterface *HardwareAbstraction::createFifo(const QString &fileName) const
 {
 	return new Fifo(fileName);
+}
+
+NanomsgInterface *HardwareAbstraction::createNanomsg(const QString &fileName) const
+{
+    return new Nanomsg(fileName);
 }
 
 InputDeviceFileInterface *HardwareAbstraction::createInputDeviceFile(const QString &fileName) const

@@ -18,6 +18,7 @@
 #include "outputDeviceFileInterface.h"
 #include "eventFileInterface.h"
 #include "fifoInterface.h"
+#include "nanomsgInterface.h"
 #include "mspI2cInterface.h"
 #include "mspUsbInterface.h"
 #include "systemConsoleInterface.h"
@@ -47,6 +48,7 @@ public:
 	/// Creates new FIFO, passes ownership to a caller.
 	/// @param fileName - file name (with path, relative or absolute) of a FIFO file.
 	virtual FifoInterface *createFifo(const QString &fileName) const = 0;
+    virtual NanomsgInterface *createNanomsg(const QString &filename) const = 0;
 
 	/// Creates new input device file, passes ownership to a caller.
 	/// @param fileName - file name (with path, relative or absolute) of a device file.

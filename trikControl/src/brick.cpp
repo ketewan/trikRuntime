@@ -35,6 +35,7 @@
 #include "encoder.h"
 #include "eventDevice.h"
 #include "fifo.h"
+#include "nanomsg.h"
 #include "gamepad.h"
 #include "gyroSensor.h"
 #include "keys.h"
@@ -138,6 +139,7 @@ Brick::~Brick()
 	qDeleteAll(mSoundSensors);
 	qDeleteAll(mColorSensors);
 	qDeleteAll(mFifos);
+    qDeleteAll(mNanomsgs);
 	qDeleteAll(mEventDevices);
 
 	// Clean up devices before killing hardware abstraction since their finalization may depend on it.
@@ -422,6 +424,11 @@ trikControl::FifoInterface *Brick::fifo(const QString &port)
 	return mFifos[port];
 }
 
+trikControl::NanomsgInterface *Brick::nanomsg(const QString &port)
+{
+    return mNanomsgs[port];
+}
+
 MarkerInterface *Brick::marker()
 {
 	return nullptr;
@@ -489,7 +496,10 @@ void Brick::shutdownDevice(const QString &port)
 	} else if (deviceClass == "fifo") {
 		delete mFifos[port];
 		mFifos.remove(port);
-	}
+    } else if (deviceClass == "nanomsg") {
+        delete mNanomsgs[port];
+        mNanomsgs.remove(port);
+    }
 }
 
 void Brick::createDevice(const QString &port)
@@ -535,7 +545,9 @@ void Brick::createDevice(const QString &port)
 			connect(mSoundSensors[port], SIGNAL(stopped()), this, SIGNAL(stopped()));
 		} else if (deviceClass == "fifo") {
 			mFifos.insert(port, new Fifo(port, mConfigurer, *mHardwareAbstraction));
-		}
+        } else if (deviceClass == "nanomsg") {
+            mNanomsgs.insert(port, new Nanomsg(port, mConfigurer, *mHardwareAbstraction));
+        }
 	} catch (MalformedConfigException &e) {
 		QLOG_ERROR() << "Config for port" << port << "is malformed:" << e.errorMessage();
 		QLOG_ERROR() << "Ignoring device";

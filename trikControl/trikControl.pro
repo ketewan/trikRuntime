@@ -94,6 +94,8 @@ HEADERS += \
 	$$PWD/src/shapes/rectangle.h \
 	$$PWD/src/shapes/shape.h \
 	$$PWD/src/gyroSensor.h \
+    include/trikControl/nanomsgInterface.h \
+    src/nanomsg.h
 #	$$PWD/src/headingSensor.h \
 
 SOURCES += \
@@ -146,6 +148,7 @@ SOURCES += \
 	$$PWD/src/audioSynthDevices.cpp \
 	$$PWD/src/gyroSensor.cpp \
 #	$$PWD/src/headingSensor.cpp \
+    src/nanomsg.cpp
 
 CONFIGS += \
 	$$PWD/model-config-usb.xml \

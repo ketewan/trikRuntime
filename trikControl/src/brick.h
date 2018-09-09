@@ -36,6 +36,7 @@ class Display;
 class Encoder;
 class EventDevice;
 class Fifo;
+class Nanomsg;
 class Gamepad;
 class GyroSensor;
 class MspCommunicatorInterface;
@@ -133,6 +134,8 @@ public slots:
 
 	FifoInterface *fifo(const QString &port) override;
 
+    NanomsgInterface *nanomsg(const QString &port) override;
+
 	MarkerInterface *marker() override;
 
 	EventDeviceInterface *eventDevice(const QString &deviceFile) override;
@@ -179,6 +182,7 @@ private:
 	QHash<QString, ObjectSensor *> mObjectSensors;  // Has ownership.
 	QHash<QString, SoundSensor *> mSoundSensors;  // Has ownership.
 	QHash<QString, Fifo *> mFifos;  // Has ownership.
+    QHash<QString, Nanomsg *> mNanomsgs;
 	QHash<QString, EventDeviceInterface *> mEventDevices;  // Has ownership.
 
 	QString mPlayWavFileCommand;

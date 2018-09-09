@@ -32,7 +32,8 @@ public:
 
 	EventFileInterface *createEventFile(const QString &fileName, QThread &thread) const override;
 	FifoInterface *createFifo(const QString &fileName) const override;
-	InputDeviceFileInterface *createInputDeviceFile(const QString &fileName) const override;
+    NanomsgInterface *createNanomsg(const QString &filename) const override;
+    InputDeviceFileInterface *createInputDeviceFile(const QString &fileName) const override;
 	OutputDeviceFileInterface *createOutputDeviceFile(const QString &fileName) const override;
 
 private:

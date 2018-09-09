@@ -34,6 +34,7 @@
 #include "sensorInterface.h"
 #include "soundSensorInterface.h"
 #include "vectorSensorInterface.h"
+#include "nanomsgInterface.h"
 
 #include "declSpec.h"
 
@@ -136,6 +137,9 @@ public slots:
 
 	/// Returns custom FIFO file which can be used as sensor.
 	virtual FifoInterface *fifo(const QString &port) = 0;
+
+    // Returns nanomsg client
+    virtual NanomsgInterface *nanomsg(const QString &port) = 0;
 
 	/// Returns marker.
 	virtual MarkerInterface *marker() = 0;

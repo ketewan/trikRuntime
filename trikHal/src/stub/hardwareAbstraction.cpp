@@ -65,7 +65,7 @@ FifoInterface *HardwareAbstraction::createFifo(const QString &fileName) const
 
 NanomsgInterface *HardwareAbstraction::createNanomsg(const QString &fileName) const
 {
-    return new Nanomsg(fileName);
+	return new Nanomsg(fileName);
 }
 
 InputDeviceFileInterface *HardwareAbstraction::createInputDeviceFile(const QString &fileName) const

@@ -21,29 +21,29 @@ namespace trikHal {
 
 class NanomsgInterface : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    /// Connects to replier.
-    /// @returns true, if connected successfully.
-    virtual bool connect() = 0;
+	/// Connects to replier.
+	/// @returns true, if connected successfully.
+	virtual bool connect() = 0;
 
-    virtual bool close() = 0;
+	virtual bool close() = 0;
 
-    virtual bool subscribe() = 0;
+	virtual bool subscribe() = 0;
 
-    virtual bool sendRequest(const QString &request) = 0;
+	virtual bool sendRequest(const QString &request) = 0;
 
-    /// Returns file name of a server/replier.
-    /// ipc://tmp/[server, node]_filename.ipc
-    virtual QString fileName() = 0;
+	/// Returns file name of a server/replier.
+	/// ipc://tmp/[server, node]_filename.ipc
+	virtual QString fileName() = 0;
 
 signals:
-    /// Emitted when there is new data.
-    void newData(const QString &data);
+	/// Emitted when there is new data.
+	void newData(const QString &data);
 
-    /// Emitted when something is wrong
-    void newError();
+	/// Emitted when something is wrong
+	void newError();
 };
 
 }

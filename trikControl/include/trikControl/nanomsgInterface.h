@@ -25,25 +25,25 @@ namespace trikControl {
 /// Interface that represents nanomsg client
 class TRIKCONTROL_EXPORT NanomsgInterface : public QObject, public DeviceInterface
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public slots:
-    /// Returns true if there is new data.
-    virtual bool hasData() const = 0;
+	/// Returns true if there is new data.
+	virtual bool hasData() const = 0;
 
-    /// Reads all available data.
-    virtual QString read() = 0;
+	/// Reads all available data.
+	virtual QString read() = 0;
 
-    ///Server has to be specified by file address.
-    /// Sends request to server.
-    virtual bool sendRequest(const QString &request) = 0;
+	///Server has to be specified by file address.
+	/// Sends request to server.
+	virtual bool sendRequest(const QString &request) = 0;
 
-    /// Subscribe for data published by server.
-    virtual bool subscribe() = 0;
+	/// Subscribe for data published by server.
+	virtual bool subscribe() = 0;
 
 signals:
-    /// Emitted when new string has arrived from server.
-    void newData(const QString &data);
+	/// Emitted when new string has arrived from server.
+	void newData(const QString &data);
 };
 
 }

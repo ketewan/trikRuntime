@@ -71,6 +71,7 @@ Q_DECLARE_METATYPE(QTimer*)
 	TEMPLATE(BatteryInterface) \
 	TEMPLATE(ColorSensorInterface) \
 	TEMPLATE(FifoInterface) \
+	TEMPLATE(NanomsgInterface) \
 	TEMPLATE(DisplayInterface) \
 	TEMPLATE(EncoderInterface) \
 	TEMPLATE(EventCodeInterface) \
@@ -108,12 +109,12 @@ QScriptValue print(QScriptContext *context, QScriptEngine *engine)
 	auto script = dynamic_cast<ScriptExecutionControl*> (scriptValue.toQObject());
 	if (script) {
 		QMetaObject::invokeMethod(script, "sendMessage", Q_ARG(QString, QString("print: %1").arg(result)));
-//		If this does not work then it can be workarrounded:
-//		QSignalMapper *mapper = new QSignalMapper();
-//		QObject::connect(mapper, SIGNAL(mapped(QString)), script, SIGNAL(sendMessage(QString)), Qt::DirectConnection);
-//		mapper->setMapping(nullptr, QString("print: %1").arg(result));
-//		mapper->map(nullptr);
-//		delete mapper;
+		//		If this does not work then it can be workarrounded:
+		//		QSignalMapper *mapper = new QSignalMapper();
+		//		QObject::connect(mapper, SIGNAL(mapped(QString)), script, SIGNAL(sendMessage(QString)), Qt::DirectConnection);
+		//		mapper->setMapping(nullptr, QString("print: %1").arg(result));
+		//		mapper->map(nullptr);
+		//		delete mapper;
 	}
 
 	return engine->toScriptValue(result);
@@ -126,9 +127,9 @@ QScriptValue timeInterval(QScriptContext *context, QScriptEngine *engine)
 }
 
 ScriptEngineWorker::ScriptEngineWorker(trikControl::BrickInterface &brick
-		, trikNetwork::MailboxInterface * const mailbox
-		, ScriptExecutionControl &scriptControl
-		)
+									   , trikNetwork::MailboxInterface * const mailbox
+									   , ScriptExecutionControl &scriptControl
+									   )
 	: mBrick(brick)
 	, mMailbox(mailbox)
 	, mScriptControl(scriptControl)
@@ -189,9 +190,9 @@ void ScriptEngineWorker::stopScript()
 		mDirectScriptsEngine->abortEvaluation();
 		QLOG_INFO() << "ScriptEngineWorker : ending interpretation";
 		emit completed(mDirectScriptsEngine->hasUncaughtException()
-						? mDirectScriptsEngine->uncaughtException().toString()
-						: ""
-				, mScriptId);
+					   ? mDirectScriptsEngine->uncaughtException().toString()
+					   : ""
+						 , mScriptId);
 
 		mDirectScriptsEngine->deleteLater();
 		mDirectScriptsEngine = nullptr;
@@ -279,8 +280,8 @@ void ScriptEngineWorker::doRunDirect(const QString &command, int scriptId)
 		if (mDirectScriptsEngine && mDirectScriptsEngine->hasUncaughtException()) {
 			QLOG_INFO() << "ScriptEngineWorker : ending interpretation of direct script";
 			emit completed(mDirectScriptsEngine->hasUncaughtException()
-					? mDirectScriptsEngine->uncaughtException().toString()
-					: "", mScriptId);
+						   ? mDirectScriptsEngine->uncaughtException().toString()
+						   : "", mScriptId);
 			mDirectScriptsEngine->deleteLater();
 			mDirectScriptsEngine = nullptr;
 		}
@@ -326,7 +327,7 @@ QScriptEngine * ScriptEngineWorker::createScriptEngine(bool supportThreads)
 
 	REGISTER_DEVICES_WITH_TEMPLATE(REGISTER_METATYPE_FOR_ENGINE)
 
-	Scriptable<QTimer>::registerMetatype(engine);
+			Scriptable<QTimer>::registerMetatype(engine);
 	qScriptRegisterMetaType(engine, timeValToScriptValue, timeValFromScriptValue);
 	qScriptRegisterSequenceMetaType<QVector<int>>(engine);
 	qScriptRegisterSequenceMetaType<QStringList>(engine);

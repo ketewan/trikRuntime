@@ -24,39 +24,39 @@ namespace trikHal {
 
 class Nanomsg : public NanomsgInterface
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    /// Constructor.
-    /// @param fileName - name of a server/replier file.
-    explicit Nanomsg(const QString &fileName);
+	/// Constructor.
+	/// @param fileName - name of a server/replier file.
+	explicit Nanomsg(const QString &fileName);
 
-    ~Nanomsg() override;
+	~Nanomsg() override;
 
-    bool connect() override;
-    bool close() override;
-    bool subscribe() override;
-    bool sendRequest(const QString &request) override;
+	bool connect() override;
+	bool close() override;
+	bool subscribe() override;
+	bool sendRequest(const QString &request) override;
 
-    QString fileName() override;
+	QString fileName() override;
 
 private slots:
-    /// Called when there is new data.
-    void readData();
+	/// Called when there is new data.
+	void readData();
 
 private:
-    /// Name of a server/replier file.
-    const QString mFileName;
+	/// Name of a server/replier file.
+	const QString mFileName;
 
-    /// Socket files.
-    int mSubscriber;
-    int mRequester;
+	/// Socket files.
+	int mSubscriber;
+	int mRequester;
 
-    /// Only for notifies, not for read/write
-    int mSubscriberFD;
+	/// Only for notifies, not for read/write
+	int mSubscriberFD;
 
-    /// Notifier for subscriber fd that emits a signal when something is changed in it.
-    QScopedPointer<QSocketNotifier> mSocketNotifier;
+	/// Notifier for subscriber fd that emits a signal when something is changed in it.
+	QScopedPointer<QSocketNotifier> mSocketNotifier;
 };
 
 }

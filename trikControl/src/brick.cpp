@@ -15,9 +15,9 @@
 #include "brick.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	#include <QtGui/QApplication>
+#include <QtGui/QApplication>
 #else
-	#include <QtWidgets/QApplication>
+#include <QtWidgets/QApplication>
 #endif
 
 #include <QtCore/QFileInfo>
@@ -60,7 +60,7 @@ using namespace trikKernel;
 using namespace trikHal;
 
 Brick::Brick(trikHal::HardwareAbstractionInterface &hardwareAbstraction
-		, const QString &systemConfig, const QString &modelConfig, const QString &mediaPath)
+			 , const QString &systemConfig, const QString &modelConfig, const QString &mediaPath)
 	: Brick(createDifferentOwnerPointer(hardwareAbstraction), systemConfig, modelConfig, mediaPath)
 {
 }
@@ -71,9 +71,9 @@ Brick::Brick(const QString &systemConfig, const QString &modelConfig, const QStr
 }
 
 Brick::Brick(const trikKernel::DifferentOwnerPointer<trikHal::HardwareAbstractionInterface> &hardwareAbstraction
-		, const QString &systemConfig
-		, const QString &modelConfig
-		, const QString &mediaPath)
+			 , const QString &systemConfig
+			 , const QString &modelConfig
+			 , const QString &mediaPath)
 	: mHardwareAbstraction(hardwareAbstraction)
 	, mTonePlayer(new TonePlayer())
 	, mMediaPath(mediaPath)
@@ -139,7 +139,7 @@ Brick::~Brick()
 	qDeleteAll(mSoundSensors);
 	qDeleteAll(mColorSensors);
 	qDeleteAll(mFifos);
-    qDeleteAll(mNanomsgs);
+	qDeleteAll(mNanomsgs);
 	qDeleteAll(mEventDevices);
 
 	// Clean up devices before killing hardware abstraction since their finalization may depend on it.
@@ -426,7 +426,7 @@ trikControl::FifoInterface *Brick::fifo(const QString &port)
 
 trikControl::NanomsgInterface *Brick::nanomsg(const QString &port)
 {
-    return mNanomsgs[port];
+	return mNanomsgs[port];
 }
 
 MarkerInterface *Brick::marker()
@@ -496,10 +496,10 @@ void Brick::shutdownDevice(const QString &port)
 	} else if (deviceClass == "fifo") {
 		delete mFifos[port];
 		mFifos.remove(port);
-    } else if (deviceClass == "nanomsg") {
-        delete mNanomsgs[port];
-        mNanomsgs.remove(port);
-    }
+	} else if (deviceClass == "nanomsg") {
+		delete mNanomsgs[port];
+		mNanomsgs.remove(port);
+	}
 }
 
 void Brick::createDevice(const QString &port)
@@ -545,9 +545,9 @@ void Brick::createDevice(const QString &port)
 			connect(mSoundSensors[port], SIGNAL(stopped()), this, SIGNAL(stopped()));
 		} else if (deviceClass == "fifo") {
 			mFifos.insert(port, new Fifo(port, mConfigurer, *mHardwareAbstraction));
-        } else if (deviceClass == "nanomsg") {
-            mNanomsgs.insert(port, new Nanomsg(port, mConfigurer, *mHardwareAbstraction));
-        }
+		} else if (deviceClass == "nanomsg") {
+			mNanomsgs.insert(port, new Nanomsg(port, mConfigurer, *mHardwareAbstraction));
+		}
 	} catch (MalformedConfigException &e) {
 		QLOG_ERROR() << "Config for port" << port << "is malformed:" << e.errorMessage();
 		QLOG_ERROR() << "Ignoring device";

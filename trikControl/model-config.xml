@@ -126,12 +126,12 @@ Note that device, even if listed here, may fail by itself, then it also will not
 
 	<!-- Example of custom FIFO sensor -->
 
-        <soundSensor>
+	<soundSensor>
 		<fifo />
 	</soundSensor>
 
-        <nmsgSoundSensor>
-	        <nanomsg />
+	<nmsgSoundSensor>
+		<nanomsg />
 	</nmsgSoundSensor>
 
 </config>

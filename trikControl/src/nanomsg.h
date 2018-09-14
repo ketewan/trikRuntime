@@ -33,49 +33,49 @@ namespace trikControl {
 
 class Nanomsg: public NanomsgInterface
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    /// @param virtualPort - port in system-config.xml
-    /// @param configurer - configurer object containing preparsed XML files with parameters.
-    /// @param hardwareAbstraction - interface to underlying hardware or operating system capabilities of a robot.
-    Nanomsg(const QString &virtualPort, const trikKernel::Configurer &configurer
-            , const trikHal::HardwareAbstractionInterface &hardwareAbstraction);
+	/// @param virtualPort - port in system-config.xml
+	/// @param configurer - configurer object containing preparsed XML files with parameters.
+	/// @param hardwareAbstraction - interface to underlying hardware or operating system capabilities of a robot.
+	Nanomsg(const QString &virtualPort, const trikKernel::Configurer &configurer
+			, const trikHal::HardwareAbstractionInterface &hardwareAbstraction);
 
-    /// @param fileName - ipc:///tmp/[node, server]_fileName.ipc
-    /// @param hardwareAbstraction - interface to underlying hardware or operating system capabilities of a robot.
-    Nanomsg(const QString &fileName, const trikHal::HardwareAbstractionInterface &hardwareAbstraction);
+	/// @param fileName - ipc:///tmp/[node, server]_fileName.ipc
+	/// @param hardwareAbstraction - interface to underlying hardware or operating system capabilities of a robot.
+	Nanomsg(const QString &fileName, const trikHal::HardwareAbstractionInterface &hardwareAbstraction);
 
-    ~Nanomsg() override;
+	~Nanomsg() override;
 
-    Status status() const override;
+	Status status() const override;
 
 public slots:
-    /// Reads all available data.
-    QString read() override;
+	/// Reads all available data.
+	QString read() override;
 
-    /// Returns true if there is new data.
-    bool hasData() const override;
+	/// Returns true if there is new data.
+	bool hasData() const override;
 
-    ///Server has to be specified by file address.
-    /// Sends request to server.
-    bool sendRequest(const QString &request) override;
+	///Server has to be specified by file address.
+	/// Sends request to server.
+	bool sendRequest(const QString &request) override;
 
-    /// Subscribes for data published by server.
-    bool subscribe() override;
+	/// Subscribes for data published by server.
+	bool subscribe() override;
 
 private slots:
-    void onNewData(const QString &data);
-    void onNewError();
+	void onNewData(const QString &data);
+	void onNewError();
 
 private:
-    QScopedPointer<trikHal::NanomsgInterface> mNanomsg;
+	QScopedPointer<trikHal::NanomsgInterface> mNanomsg;
 
-    /// Last line that was read.
-    QString mCurrent;
+	/// Last line that was read.
+	QString mCurrent;
 
-    /// State of a file as a device.
-    DeviceState mState;
+	/// State of a file as a device.
+	DeviceState mState;
 };
 
 }

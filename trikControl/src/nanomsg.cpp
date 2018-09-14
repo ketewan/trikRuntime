@@ -26,75 +26,75 @@
 using namespace trikControl;
 
 Nanomsg::Nanomsg(const QString &virtualPort, const trikKernel::Configurer &configurer
-                , const trikHal::HardwareAbstractionInterface &hardwareAbstraction)
-        : Nanomsg(configurer.attributeByPort(virtualPort, "file"), hardwareAbstraction)
+			   , const trikHal::HardwareAbstractionInterface &hardwareAbstraction)
+	: Nanomsg(configurer.attributeByPort(virtualPort, "file"), hardwareAbstraction)
 {
 }
 
 Nanomsg::Nanomsg(const QString &fileName, const trikHal::HardwareAbstractionInterface &hardwareAbstraction)
-        : mNanomsg(hardwareAbstraction.createNanomsg(fileName))
-        , mState("Nanomsg client on '" + fileName + "'")
+	: mNanomsg(hardwareAbstraction.createNanomsg(fileName))
+	, mState("Nanomsg client on '" + fileName + "'")
 {
-    mState.start();
+	mState.start();
 
-    connect(mNanomsg.data(), SIGNAL(newData(QString)), this, SLOT(onNewData(QString)));
-    connect(mNanomsg.data(), SIGNAL(newError()), this, SLOT(onNewError()));
+	connect(mNanomsg.data(), SIGNAL(newData(QString)), this, SLOT(onNewData(QString)));
+	connect(mNanomsg.data(), SIGNAL(newError()), this, SLOT(onNewError()));
 
-    if (mNanomsg->connect()) {
-        mState.ready();
-    } else {
-        mState.fail();
-    }
+	if (mNanomsg->connect()) {
+		mState.ready();
+	} else {
+		mState.fail();
+	}
 }
 
 Nanomsg::~Nanomsg()
 {
-    if (mState.isReady()) {
-        mNanomsg->close();
-    }
+	if (mState.isReady()) {
+		mNanomsg->close();
+	}
 }
 
 DeviceInterface::Status Nanomsg::status() const
 {
-    return mState.status();
+	return mState.status();
 }
 
 QString Nanomsg::read()
 {
-    //???
-        while (mCurrent.isEmpty()) {
-        QEventLoop eventLoop;
-        connect(this, SIGNAL(newData(QString)), &eventLoop, SLOT(quit()));
-        eventLoop.exec();
-    }
-    //???
+	//???
+	while (mCurrent.isEmpty()) {
+		QEventLoop eventLoop;
+		connect(this, SIGNAL(newData(QString)), &eventLoop, SLOT(quit()));
+		eventLoop.exec();
+	}
+	//???
 
-    const QString result = mCurrent;
-    mCurrent = "";
-    return result;
+	const QString result = mCurrent;
+	mCurrent = "";
+	return result;
 }
 
 bool Nanomsg::hasData() const
 {
-    return mCurrent != "";
+	return mCurrent != "";
 }
 
 bool Nanomsg::subscribe()  {
-    return mNanomsg->subscribe();
+	return mNanomsg->subscribe();
 }
 
 bool Nanomsg::sendRequest(const QString &request) {
-    return mNanomsg->sendRequest(request);
+	return mNanomsg->sendRequest(request);
 }
 
 void Nanomsg::onNewData(const QString &data)
 {
-    QString buffer = data;
-    mCurrent.swap(buffer);
-    emit newData(data);
+	QString buffer = data;
+	mCurrent.swap(buffer);
+	emit newData(data);
 }
 
 void Nanomsg::onNewError()
 {
-    mState.fail();
+	mState.fail();
 }

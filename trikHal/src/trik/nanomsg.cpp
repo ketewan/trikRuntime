@@ -118,7 +118,7 @@ void Nanomsg::readData()
 {
 	mSocketNotifier->setEnabled(false);
 
-	void *buf = NULL;
+	char *buf = NULL;
 	int bytes = -1;
 
 	if ((bytes = nn_recv(mSubscriber, &buf, NN_MSG, 0)) < 0) {
@@ -127,13 +127,16 @@ void Nanomsg::readData()
 		return;
 	}
 
-	QString mBuffer(QByteArray((char*)buf, bytes));
-	if (mBuffer.contains("\n")) {
-		QStringList lines = mBuffer.split('\n', QString::SkipEmptyParts);
+	QString mBuffer(QByteArray(buf, bytes));
+	QStringList lines = mBuffer.split('\n', QString::SkipEmptyParts);
 
-		for (const QString &line : lines) {
-			emit newData(line);
-		}
+//	for (auto i = 0; i < bytes; i++)
+//		std::cout << (int)buf[i] << " ";
+//	std::cout << std::endl;
+
+	for (const QString &line : lines) {
+		//qDebug() << "line: " << line.toLatin1().data();
+		emit newData(line);
 	}
 
 	nn_freemsg(buf);

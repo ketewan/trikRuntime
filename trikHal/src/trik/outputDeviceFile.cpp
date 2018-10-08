@@ -18,12 +18,12 @@
 
 using namespace trikHal;
 
-outputDeviceFile::outputDeviceFile(const QString &fileName)
+OutputDeviceFile::OutputDeviceFile(const QString &fileName)
 	: mFile(fileName)
 {
 }
 
-bool outputDeviceFile::open()
+bool OutputDeviceFile::open()
 {
 	QLOG_INFO() << "Opening output device file" << mFile.fileName();
 
@@ -35,7 +35,7 @@ bool outputDeviceFile::open()
 	return true;
 }
 
-void outputDeviceFile::close()
+void OutputDeviceFile::close()
 {
 	if (mFile.isOpen()) {
 		QLOG_INFO() << "Closing output device file" << mFile.fileName();
@@ -43,13 +43,13 @@ void outputDeviceFile::close()
 	}
 }
 
-void outputDeviceFile::write(const QString &data)
+void OutputDeviceFile::write(const QString &data)
 {
 	mFile.write(data.toUtf8());
 	mFile.flush();
 }
 
-QString outputDeviceFile::fileName() const
+QString OutputDeviceFile::fileName() const
 {
 	return mFile.fileName();
 }

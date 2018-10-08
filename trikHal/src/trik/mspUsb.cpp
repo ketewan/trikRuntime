@@ -21,21 +21,21 @@
 
 using namespace trikHal;
 
-mspUsb::~mspUsb()
+MspUsb::~MspUsb()
 {
 }
 
-void mspUsb::send(const QByteArray &data)
+void MspUsb::send(const QByteArray &data)
 {
 	send_USBMSP(data);
 }
 
-int mspUsb::read(const QByteArray &data)
+int MspUsb::read(const QByteArray &data)
 {
 	return read_USBMSP(data);
 }
 
-bool mspUsb::connect()
+bool MspUsb::connect()
 {
 #ifndef I_UNDERSTAND_ALL_RISKS
 	return false;
@@ -50,7 +50,7 @@ bool mspUsb::connect()
 #endif /* I_UNDERSTAND_ALL_RISKS */
 }
 
-void mspUsb::disconnect()
+void MspUsb::disconnect()
 {
 	disconnect_USBMSP();
 }

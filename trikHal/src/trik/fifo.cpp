@@ -56,24 +56,24 @@ bool Fifo::open()
 
 void Fifo::readFile()
 {
-    constexpr int BUFSIZE = 400;
-    char data[BUFSIZE];// = {0};
+	constexpr int BUFSIZE = 400;
+	char data[BUFSIZE];// = {0};
 
 	mSocketNotifier->setEnabled(false);
-    int bytesRead;
-    while ((bytesRead = ::read(mFileDescriptor, &data, BUFSIZE - 1)) > 0) {
-        data[bytesRead] = 0;
-        mBuffer += data;
-    }
+	int bytesRead;
+	while ((bytesRead = ::read(mFileDescriptor, &data, BUFSIZE - 1)) > 0) {
+		data[bytesRead] = 0;
+		mBuffer += data;
+	}
 
-    if ( bytesRead < 0) {
-        if (errno != EAGAIN) {
-            QLOG_ERROR() << "FIFO read failed: " << strerror(errno);
-            emit readError();
-            return;
-         } else {
-            // Skip EAGAIN error for non-blocking FIFO
-         }
+	if ( bytesRead < 0) {
+		if (errno != EAGAIN) {
+			QLOG_ERROR() << "FIFO read failed: " << strerror(errno);
+			emit readError();
+			return;
+		} else {
+			// Skip EAGAIN error for non-blocking FIFO
+		}
 	}
 
 	if (mBuffer.contains("\n")) {

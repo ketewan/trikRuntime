@@ -106,7 +106,7 @@ bool Nanomsg::sendRequest(const QString &request) {
 
 	char *buf = NULL;
 
-	if (nn_recv(mRequester, &buf, NN_MSG, 0) < 0) {
+	if (nn_recv(mRequester, &buf, NN_MSG, 1) < 0) {
 		QLOG_ERROR() << "sendRequest nn_recv error";
 		return false;
 	}
@@ -121,25 +121,21 @@ void Nanomsg::readData()
 	char *buf = NULL;
 	int bytes = -1;
 
-	if ((bytes = nn_recv(mSubscriber, &buf, NN_MSG, 0)) < 0) {
-		QLOG_ERROR() << "readData nn_recv error";
-		emit newError();
-		return;
+	// recieve ALL available messages
+	while ((bytes = nn_recv(mSubscriber, &buf, NN_MSG, 1)) > 0) {
+		//QLOG_ERROR() << "readData nn_recv error";
+		//emit newError();
+		//return;
+		QString mBuffer(QByteArray(buf, bytes));
+		QStringList lines = mBuffer.split('\n', QString::SkipEmptyParts);
+
+		for (const QString &line : lines) {
+			emit newData(line);
+		}
+
+		nn_freemsg(buf);
 	}
 
-	QString mBuffer(QByteArray(buf, bytes));
-	QStringList lines = mBuffer.split('\n', QString::SkipEmptyParts);
-
-//	for (auto i = 0; i < bytes; i++)
-//		std::cout << (int)buf[i] << " ";
-//	std::cout << std::endl;
-
-	for (const QString &line : lines) {
-		//qDebug() << "line: " << line.toLatin1().data();
-		emit newData(line);
-	}
-
-	nn_freemsg(buf);
 	mSocketNotifier->setEnabled(true);
 }
 

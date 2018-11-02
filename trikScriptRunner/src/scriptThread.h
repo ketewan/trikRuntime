@@ -55,10 +55,13 @@ signals:
 	/// @param json - JSON container for variables values
 	void variablesReady(const QJsonObject &json);
 
+	void variableSet();
+
 public slots:
 	/// Catch variables values from current script execution
 	/// @param propertyName - name of variables prefix, i.e prefix "web" for variable "web.light"
 	void onGetVariables(const QString &propertyName);
+	void onSetVariable(const QString &propertyName, const QString &variable, const QString &value);
 
 protected:
 	void run() override;

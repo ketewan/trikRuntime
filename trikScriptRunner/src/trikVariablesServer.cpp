@@ -27,6 +27,18 @@ TrikVariablesServer::TrikVariablesServer() :
 	mTcpServer->listen(QHostAddress::LocalHost, port);
 }
 
+void TrikVariablesServer::sendHTTPResponse()
+{
+#define NL "\r\n"
+	QString header = "HTTP/1.0 200 OK" NL
+					 "Connection: close" NL
+					 NL;
+#undef NL
+
+	mCurrentConnection->write(header.toLatin1());
+	mCurrentConnection->close();
+}
+
 void TrikVariablesServer::sendHTTPResponse(const QJsonObject &json)
 {
 	QByteArray jsonBytes = QJsonDocument(json).toJson();
@@ -68,7 +80,14 @@ void TrikVariablesServer::processHTTPRequest()
 	const QString cleanString = list.join("").remove(QRegExp("[\\n\\t\\r]"));
 	const QStringList words = cleanString.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
-	if (words[1] == "/web/") {
-		emit getVariables("web");
+	if (words[1].startsWith("/web")) {
+		// /web/?request=getVariables
+		// /web/?request=setVariables&variable=value
+		QStringList requestParts = words[1].split(QRegExp("\\?\\=\\&"));
+		if (requestParts[2] == "getVariables")
+			emit getVariables("web");
+		else if (requestParts.size() > 4)
+			emit setVariable("web", requestParts[3], requestParts[4]);
+
 	}
 }

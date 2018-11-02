@@ -96,6 +96,10 @@ signals:
 	/// @param json - JSON container for variables values
 	void variablesReady(const QJsonObject &data);
 
+	void setVariable(const QString &propertyName, const QString &variable, const QString &value);
+
+	void variableSet();
+
 public slots:
 	/// Starts script evaluation, emits startedScript() signal and returns. Script will be executed asynchronously.
 	/// completed() signal is emitted upon script abortion or completion.

@@ -95,6 +95,8 @@ void Threading::startThread(const QString &threadId, QScriptEngine *engine, cons
 	if (threadId == mMainThreadName) {
 		connect(this, SIGNAL(getVariables(QString)), thread, SLOT(onGetVariables(QString)));
 		connect(thread, SIGNAL(variablesReady(QJsonObject)), this, SIGNAL(variablesReady(QJsonObject)));
+		connect(this, SIGNAL(setVariable(QString, QString, QString)), thread, SLOT(onSetVariable(QString, QString, QString)));
+		connect(thread, SIGNAL(variableSet()), this, SIGNAL(variableSet()));
 	}
 	mThreads[threadId] = thread;
 	mFinishedThreads.remove(threadId);

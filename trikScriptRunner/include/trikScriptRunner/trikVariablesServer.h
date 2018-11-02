@@ -32,10 +32,14 @@ signals:
 	/// @param propertyName - name of variables prefix, i.e prefix "web" for variable "web.light"
 	void getVariables(const QString &propertyName);
 
+	void setVariable(const QString &propertyName, const QString &variable, const QString &name);
+
 public slots:
 	/// Sends HTTP response with JSON data about variables
 	/// @param json - JSON container for variables values
 	void sendHTTPResponse(const QJsonObject &json);
+
+	void sendHTTPResponse();
 
 private slots:
 	/// Appends new connection for handling it

@@ -46,8 +46,15 @@ TrikJavaScriptRunner::TrikJavaScriptRunner(trikControl::BrickInterface &brick
 	connect(mScriptController.data(), SIGNAL(sendMessage(QString)), this, SIGNAL(sendMessage(QString)));
 
 	connect(mVariablesServer.data(), SIGNAL(getVariables(QString)), mScriptEngineWorker, SIGNAL(getVariables(QString)));
+
 	connect(mScriptEngineWorker, SIGNAL(variablesReady(QJsonObject))
 		, mVariablesServer.data(), SLOT(sendHTTPResponse(QJsonObject)));
+
+	connect(mVariablesServer.data(), SIGNAL(setVariable(QString, QString, QString)), mScriptEngineWorker, SIGNAL(setVariable(QString, QString, QString)));
+
+	connect(mScriptEngineWorker, SIGNAL(variableSet())
+		, mVariablesServer.data(), SLOT(sendHTTPResponse()));
+
 
 	QLOG_INFO() << "Starting TrikJavaScriptRunner worker thread" << &mWorkerThread;
 

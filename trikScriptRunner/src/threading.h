@@ -87,6 +87,10 @@ signals:
 	/// @param json - JSON container for variables values
 	void variablesReady(const QJsonObject &data);
 
+	void setVariable(const QString &propertyName, const QString &variable, const QString &value);
+
+	void variableSet();
+
 private:
 	/// Starts a thread with given threadId
 	/// @param engine - script engine that will do the work; it will be owned by a newly created thread

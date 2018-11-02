@@ -93,3 +93,12 @@ void ScriptThread::onGetVariables(const QString &propertyName)
 		emit variablesReady(json);
 	}
 }
+
+void ScriptThread::onSetVariable(const QString &propertyName, const QString &variable, const QString &value)
+{
+	if (mEngine != nullptr) {
+		auto obj = mEngine->globalObject().property(propertyName);
+		obj.setProperty(variable, value);
+		emit variableSet();
+	}
+}

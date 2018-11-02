@@ -84,7 +84,7 @@ void TrikVariablesServer::processHTTPRequest()
 	if (words[1].startsWith("/web")) {
 		// /web/?request=getVariables
 		// /web/?request=setVariables&variable=value
-		QStringList requestParts = words[1].split(QRegExp("\\?\\=\\&"));
+		QStringList requestParts = words[1].split(QRegExp("[\\?\\=\\&]"));
 		if (requestParts[2] == "getVariables")
 			emit getVariables("web");
 		else if (requestParts.size() > 4)

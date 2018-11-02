@@ -32,6 +32,7 @@ void TrikVariablesServer::sendHTTPResponse()
 #define NL "\r\n"
 	QString header = "HTTP/1.0 200 OK" NL
 					 "Connection: close" NL
+					 "Content-type: text/plain, charset=us-ascii" NL
 					 NL;
 #undef NL
 

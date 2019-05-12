@@ -109,12 +109,15 @@ TRANSLATIONS = \
 
 RESOURCES = trikGui.qrc
 
+LIBS += -L/usr/local/lib/ -lcoap-2
+INCLUDEPATH += 	/usr/local/include/coap2
+
 OTHER_FILES += \
 	$$PWD/trikGui.sh \
 
 copyToDestdir($$PWD/trikGui.sh)
 
-implementationIncludes(trikKernel trikControl trikCommunicator trikScriptRunner trikWiFi trikTelemetry)
+implementationIncludes(trikKernel trikControl trikCommunicator trikScriptRunner trikWiFi trikTelemetry trikNetwork)
 transitiveIncludes(trikNetwork)
 PythonQtIncludes()
 links(qslog trikKernel trikControl trikCommunicator trikScriptRunner trikWiFi trikTelemetry trikNetwork)

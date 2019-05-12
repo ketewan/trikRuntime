@@ -22,6 +22,7 @@ PUBLIC_HEADERS += \
 	$$PWD/include/trikNetwork/mailboxFactory.h \
 	$$PWD/include/trikNetwork/mailboxInterface.h \
 	$$PWD/include/trikNetwork/trikServer.h \
+	$$PWD/include/trikNetwork/trikCoapServer.h \
 
 HEADERS += \
 	$$PWD/src/mailbox.h \
@@ -35,15 +36,21 @@ SOURCES += \
 	$$PWD/src/mailboxFactory.cpp \
 	$$PWD/src/mailboxServer.cpp \
 	$$PWD/src/trikServer.cpp \
+    src/trikCoapServer.cpp
+
+LIBS += -L/usr/local/lib/ -lcoap-2
 
 INCLUDEPATH += $$PWD/include \
 	$$PWD/../qslog \
 	$$PWD/../trikKernel/include \
+	/usr/local/include/coap2
 
 QT += network
 
 DEFINES += TRIKNETWORK_LIBRARY
 
-links(qslog trikKernel)
+implementationIncludes(trikControl)
+
+links(qslog trikKernel trikControl)
 
 installs()

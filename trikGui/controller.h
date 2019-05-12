@@ -17,6 +17,7 @@
 #include <trikCommunicator/trikCommunicator.h>
 #include <trikControl/brickInterface.h>
 #include <trikNetwork/mailboxInterface.h>
+#include <trikNetwork/trikCoapServer.h>
 #include <trikScriptRunner/trikScriptRunner.h>
 #include <trikTelemetry/trikTelemetry.h>
 
@@ -126,8 +127,10 @@ private:
 	QScopedPointer<trikScriptRunner::TrikScriptRunner> mScriptRunner;
 	QScopedPointer<trikCommunicator::TrikCommunicator> mCommunicator;
 	QScopedPointer<trikTelemetry::TrikTelemetry> mTelemetry;
+	QScopedPointer<trikNetwork::TrikCoapServer> mCoapServer;
 	QScopedPointer<trikWiFi::TrikWiFi> mWiFi;
 	QScopedPointer<AutoRunner> mAutoRunner;
+	QScopedPointer<QThread> coapThread;
 
 	QHash<int, RunningWidget *> mRunningWidgets;  // Has ownership.
 };

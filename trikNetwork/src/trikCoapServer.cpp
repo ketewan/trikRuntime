@@ -1,13 +1,15 @@
 #include <QtCore/QDebug>
-
+#include <functional>
 #include <QsLog.h>
 #include "trikCoapServer.h"
 
 using namespace trikNetwork;
+TrikCoapServer* TrikCoapServer::instance = nullptr;
 
-//TrikCoapServer::TrikCoapServer(trikControl::BrickInterface &brick) : mBrick(brick){}
-
-trikControl::BrickInterface* trikNetwork::TrikCoapServer::mBrick = nullptr;
+TrikCoapServer::TrikCoapServer(trikControl::BrickInterface &brick)
+				: mBrick(brick) {
+	TrikCoapServer::instance = this;
+}
 
 int TrikCoapServer::resolve_address(const char *host, const char *service, coap_address_t *dst) {
 	struct addrinfo *res, *ainfo;
@@ -40,103 +42,177 @@ int TrikCoapServer::resolve_address(const char *host, const char *service, coap_
 	return len;
 }
 
-void TrikCoapServer::init_resources() {
-  coap_resource_t *r;
-
-  coap_str_const_t name{4, (const uint8_t *)"time"};
-  r = coap_resource_init(&name, COAP_RESOURCE_FLAGS_NOTIFY_CON);
-  coap_register_handler(r, COAP_REQUEST_GET, hnd_get_distance);
-
-  coap_resource_set_get_observable(r, 1);
-  coap_add_resource(ctx, r);
-  distance = r;
+void TrikCoapServer::init_sensors() {
+	QVector<QString> sensorsPorts = {"A1","A2","A3","A4","A5","A6","D1","D2"};
+	for (auto sensor : sensorsPorts) {
+		sensors.push_back({sensor, mBrick.sensor(sensor)});
+	}
 }
 
-void TrikCoapServer::hnd_get_distance(coap_context_t *ctx,
-					 coap_resource_t *resource,
-					 coap_session_t *session,
-					 coap_pdu_t *request,
-					 coap_binary_t *token,
-					 coap_string_t *query,
-					 coap_pdu_t *response) {
-	(void)ctx;
-	(void)resource;
-	(void)session;
-	(void)request;
-	(void)token;
-	(void)query;
-	(void)response;
+void TrikCoapServer::init_motors() {
+	QVector<QString> motorsPorts = {"M1","M2","M3","M4"};
+	for (auto motor : motorsPorts) {
+		motors.push_back({motor, mBrick.motor(motor)});
+	}
+}
 
-	auto a3 = TrikCoapServer::mBrick->sensor("A3");
-	auto data3 = a3->read();
-
-	//SERIALIZATION?????
-	char buf[50];
-	int len;
-	len = sprintf(buf, "%d", data3);
-	response->code = COAP_RESPONSE_CODE(205);
-	coap_add_data_blocked_response(resource, session, request, response, token,
+template <int N>
+void handler(coap_context_t *ctx,
+			coap_resource_t *resource,
+			coap_session_t *session,
+			coap_pdu_t *request,
+			coap_binary_t *token,
+			coap_string_t *query,
+			coap_pdu_t *response)
+{
+			(void)ctx;
+			(void)query;
+			auto sensor = TrikCoapServer::instance->sensors[N - 1];
+			auto m = sensor.second->read();
+			std::cout << sensor.first.toLatin1().data() << std::endl;
+			std::cout << "AAAAAAAAAAAAAAAAAA" << std::endl;
+			char buf[50];
+			int len;
+			len = sprintf(buf, "%d", m);
+			response->code = COAP_RESPONSE_CODE(205);
+			coap_add_data_blocked_response(resource, session, request, response, token,
 								 COAP_MEDIATYPE_TEXT_PLAIN, 1,
 								 len,
 								 (unsigned char *)buf);
 }
 
-void TrikCoapServer::hnd_get_hello(coap_context_t *ctx,
-					 coap_resource_t *resource,
-					 coap_session_t *session,
-					 coap_pdu_t *request,
-					 coap_binary_t *token,
-					 coap_string_t *query,
-					 coap_pdu_t *response) {
-	(void)ctx;
-	(void)resource;
-	(void)session;
-	(void)request;
-	(void)token;
-	(void)query;
+void motor_handler(coap_context_t *ctx,
+			coap_resource_t *resource,
+			coap_session_t *session,
+			coap_pdu_t *request,
+			coap_binary_t *token,
+			coap_string_t *query,
+			coap_pdu_t *response)
+{
+			(void)ctx;
+			(void)resource;
+			(void)session;
+			(void)request;
+			(void)token;
+			(void)response;
 
-	response->code = COAP_RESPONSE_CODE(205);
-//	auto a3 = TrikCoapServer::mBrick->sensor("A3");
-//	auto a1 = TrikCoapServer::mBrick->sensor("A1");
-//	auto a2 = TrikCoapServer::mBrick->sensor("A2");
-//	auto a4 = TrikCoapServer::mBrick->sensor("A4");
-//	auto a5 = TrikCoapServer::mBrick->sensor("A5");
-//	auto a6 = TrikCoapServer::mBrick->sensor("A6");
-//	auto data1 = a1->read();
-//	auto data2 = a2->read();
-//	auto data3 = a3->read();
-//	auto data4 = a4->read();
-//	auto data5 = a5->read();
+			auto queryString = QString((char *) query->s);
+			auto parts = queryString.split('=');
+			auto motor = parts[0];
+			auto power = parts[1].toInt();
 
-	auto m1 = TrikCoapServer::mBrick->motor("M1");
-	auto m2 = TrikCoapServer::mBrick->motor("M2");
-	auto m3 = TrikCoapServer::mBrick->motor("M3");
-	auto m4 = TrikCoapServer::mBrick->motor("M4");
-	std::cout << m1->power() << std::endl;
-	std::cout << m2->power() << std::endl;
-	std::cout << m3->power() << std::endl;
-	std::cout << m4->power() << std::endl;
-	m1->setPower(30);
-	m2->setPower(70);
-	coap_add_data(response, 5, (const uint8_t *)"hello");
+			if (motor == "M1")
+				TrikCoapServer::instance->motors[0].second->setPower(power);
+			else if (motor == "M2")
+				TrikCoapServer::instance->motors[1].second->setPower(power);
+			else if (motor == "M3")
+				TrikCoapServer::instance->motors[2].second->setPower(power);
+			else
+				TrikCoapServer::instance->motors[3].second->setPower(power);
+
+			std::cout << "after set" << std::endl;
+
+			response->code = COAP_RESPONSE_CODE(205);
+			coap_add_data_blocked_response(resource, session, request, response, token,
+											COAP_MEDIATYPE_TEXT_PLAIN, 1,
+											4,
+											(const uint8_t *)"done");
+			std::cout << TrikCoapServer::instance->motors[0].second->power();
+			std::cout << std::endl;
+}
+
+void led_handler(coap_context_t *ctx,
+			coap_resource_t *resource,
+			coap_session_t *session,
+			coap_pdu_t *request,
+			coap_binary_t *token,
+			coap_string_t *query,
+			coap_pdu_t *response)
+{
+			(void)ctx;
+			(void)resource;
+			(void)session;
+			(void)request;
+			(void)token;
+			(void)response;
+
+			auto led = TrikCoapServer::instance->mBrick.led();
+			auto queryString = QString((char *) query->s);
+			if (queryString == "green")
+				led->green();
+			else if (queryString == "red")
+				led->red();
+			else if (queryString == "orange")
+				led->orange();
+			else if (queryString == "off")
+				led->off();
+
+			response->code = COAP_RESPONSE_CODE(205);
+			coap_add_data_blocked_response(resource, session, request, response, token,
+											COAP_MEDIATYPE_TEXT_PLAIN, 1,
+											4,
+											(const uint8_t *)"done");
+}
+
+void TrikCoapServer::init_resources() {
+	// handlers for each sensor
+	QVector<coap_method_handler_t> handlers;
+	handlers.push_back(handler<1>);
+	handlers.push_back(handler<2>);
+	handlers.push_back(handler<3>);
+	handlers.push_back(handler<4>);
+	handlers.push_back(handler<5>);
+	handlers.push_back(handler<6>);
+	handlers.push_back(handler<7>);
+	handlers.push_back(handler<8>);
+
+	for (auto i = 0; i < sensors.size(); i++) {
+		auto sensor = sensors[i];
+		coap_resource_t *r;
+		auto sensor_name = sensor.first.toLatin1().data();
+		size_t len = sensor.first.length();
+		coap_str_const_t name{len, (const uint8_t *)sensor_name};
+		std::cout << len << " " << sensor_name << std::endl;
+		r = coap_resource_init(&name, COAP_RESOURCE_FLAGS_NOTIFY_NON);
+
+		observable_resources.push_back(r);
+
+		coap_register_handler(r, COAP_REQUEST_GET, handlers[i]);
+
+		coap_resource_set_get_observable(r, 1);
+		coap_add_resource(ctx, r);
+	}
+
+		coap_resource_t *r;
+		coap_str_const_t name{6, (const uint8_t *)"motors"};
+		r = coap_resource_init(&name, COAP_RESOURCE_FLAGS_NOTIFY_NON);
+		coap_register_handler(r, COAP_REQUEST_GET, motor_handler);
+		coap_add_resource(ctx, r);
+
+		coap_resource_t *led;
+		coap_str_const_t led_name{3, (const uint8_t *)"led"};
+		led = coap_resource_init(&led_name, COAP_RESOURCE_FLAGS_NOTIFY_NON);
+		coap_register_handler(led, COAP_REQUEST_GET, led_handler);
+		coap_add_resource(ctx, led);
 }
 
 void TrikCoapServer::start(void) {
+		init_sensors();
+		init_motors();
 		coap_set_log_level(LOG_DEBUG);
 		timer = new QTimer();
 		QObject::connect(timer, SIGNAL(timeout()), this, SLOT(coapRunOnce()));
-		timer->setInterval(1000);
+		timer->setInterval(10);
 		timer->start();
-
-		coap_str_const_t ruri = { 5, (const uint8_t *)"hello" };
 
 		coap_startup();
 
 		/* resolve destination address where server should be sent */
-		if (resolve_address("localhost", "5683", &dst) < 0) {
+		if (resolve_address("192.168.1.100", "5683", &dst) < 0) {
 			coap_log(LOG_CRIT, "failed to resolve address\n");
 			coap_free_context(this->ctx);
 			coap_cleanup();
+			return;
 		}
 
 		/* create CoAP context and a client session */
@@ -146,16 +222,14 @@ void TrikCoapServer::start(void) {
 			coap_log(LOG_EMERG, "cannot initialize context\n");
 			coap_free_context(ctx);
 			coap_cleanup();
+			return;
 		}
-
-		resource = coap_resource_init(&ruri, 0);
-		coap_register_handler(resource, COAP_REQUEST_GET, hnd_get_hello);
-		coap_add_resource(ctx, resource);
 
 		init_resources();
 	}
 
 void TrikCoapServer::coapRunOnce() {
 	coap_run_once(ctx, 0);
-	coap_resource_notify_observers(distance, NULL);
+	for (auto resource : observable_resources)
+		coap_resource_notify_observers(resource, NULL);
 }

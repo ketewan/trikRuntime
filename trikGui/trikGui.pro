@@ -109,8 +109,8 @@ TRANSLATIONS = \
 
 RESOURCES = trikGui.qrc
 
-LIBS += -L/usr/local/lib/ -lcoap-2
-INCLUDEPATH += 	/usr/local/include/coap2
+#LIBS += -L/home/arsonist/coap/installed_emb/usr/local/lib/ -lcoap-2
+#INCLUDEPATH += 	/home/arsonist/coap/installed_emb/usr/local/include/coap2
 
 OTHER_FILES += \
 	$$PWD/trikGui.sh \

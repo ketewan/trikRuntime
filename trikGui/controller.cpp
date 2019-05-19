@@ -55,30 +55,8 @@ Controller::Controller(const QString &configPath)
 	mScriptRunner.reset(new trikScriptRunner::TrikScriptRunner(*mBrick, mMailbox.data()));
 	mCommunicator.reset(new trikCommunicator::TrikCommunicator(*mScriptRunner, configurer.version()));
 
-	mCoapServer.reset(new trikNetwork::TrikCoapServer());
-	// UGLY SOLUTION TO PASS POINTER TO MBRICK
-	trikNetwork::TrikCoapServer::mBrick = mBrick.data();
+	mCoapServer.reset(new trikNetwork::TrikCoapServer(*mBrick));
 	coapThread.reset(new QThread());
-
-	auto dist_sensor = mBrick->sensor("A3");
-	auto a1 = mBrick->sensor("A1");
-	auto a2 = mBrick->sensor("A2");
-	auto a4 = mBrick->sensor("A4");
-	auto a5 = mBrick->sensor("A5");
-	auto a6 = mBrick->sensor("A6");
-	auto data1 = a1->read();
-	auto data2 = a2->read();
-	auto data3 = dist_sensor->read();
-	auto data4 = a4->read();
-	auto data5 = a5->read();
-	auto data6 = a6->read();
-	std::cout << data1 << std::endl;
-	std::cout << data2 << std::endl;
-	std::cout << data3 << std::endl;
-	std::cout << data4 << std::endl;
-	std::cout << data5 << std::endl;
-	std::cout << data6 << std::endl;
-	std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
 	mWiFi.reset(new trikWiFi::TrikWiFi("/tmp/trikwifi", "/var/run/wpa_supplicant/wlan0", this));
 	connect(mWiFi.data(), SIGNAL(connected()), this, SIGNAL(wiFiConnected()));

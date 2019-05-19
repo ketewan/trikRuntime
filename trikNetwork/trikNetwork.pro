@@ -36,21 +36,25 @@ SOURCES += \
 	$$PWD/src/mailboxFactory.cpp \
 	$$PWD/src/mailboxServer.cpp \
 	$$PWD/src/trikServer.cpp \
-    src/trikCoapServer.cpp
+	src/trikCoapServer.cpp
 
-LIBS += -L/usr/local/lib/ -lcoap-2
+#QMAKE_RPATHLINKDIR = /home/arsonist/coap/installed_emb_2/lib
+
+#LIBS += -L/home/arsonist/coap/installed_emb_2/lib -lcoap-2
+
 
 INCLUDEPATH += $$PWD/include \
 	$$PWD/../qslog \
 	$$PWD/../trikKernel/include \
-	/usr/local/include/coap2
+	/home/arsonist/coap/installed_emb_2/include
 
 QT += network
 
 DEFINES += TRIKNETWORK_LIBRARY
 
-implementationIncludes(trikControl)
+implementationIncludes(trikControl coap-2)
+system(ln -svt $$GLOBAL_DESTDIR /home/arsonist/coap/installed_emb_2/lib/libcoap-2.so* )
 
-links(qslog trikKernel trikControl)
+links(qslog trikKernel trikControl coap-2)
 
 installs()

@@ -244,7 +244,7 @@ false:clang {
 }
 
 
-QMAKE_CXXFLAGS += -Werror=cast-qual -Werror=write-strings -Werror=redundant-decls -Werror=unreachable-code \
+QMAKE_CXXFLAGS += -Werror=cast-qual -Werror=write-strings -Werror=unreachable-code \ #-Werror=redundant-decls
 			-Werror=non-virtual-dtor -Wno-error=overloaded-virtual \
 			-Werror=uninitialized -Werror=init-self
 

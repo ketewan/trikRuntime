@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include <coap2/coap.h>
+#include "/home/arsonist/coap/installed_emb/usr/local/include/coap2/coap.h"
 #include "declSpec.h"
 #include <trikControl/brickInterface.h>
 
@@ -24,8 +24,9 @@ class TRIKNETWORK_EXPORT TrikCoapServer : public QObject{
 	Q_OBJECT
 
 public:
-	//TrikCoapServer(trikControl::BrickInterface &brick);
-	static trikControl::BrickInterface *mBrick;
+	//TrikCoapServer();
+	static TrikCoapServer* instance;
+	TrikCoapServer(trikControl::BrickInterface &brick);
 	static int resolve_address(const char *host, const char *service, coap_address_t *dst);
 
 	static void hnd_get_hello(coap_context_t *ctx,
@@ -43,17 +44,23 @@ public:
 				 coap_binary_t *token,
 				 coap_string_t *query,
 				 coap_pdu_t *response);
-
-	void get_distance();
-
-	void init_resources();
-
 	Q_INVOKABLE void start(void);
+
+	QVector<coap_resource_t *> observable_resources;
+	QVector<QPair<QString, trikControl::SensorInterface *>> sensors;
+	QVector<QPair<QString, trikControl::MotorInterface *>> motors;
+	trikControl::BrickInterface &mBrick;
 
 private slots:
 	void coapRunOnce();
 
 private:
+	void init_sensors();
+	void init_motors();
+	void get_distance();
+	void init_resources();
+	void sensor_handler();
+
 	coap_context_t *ctx = nullptr;
 	coap_address_t dst;
 	coap_resource_t *resource = nullptr;

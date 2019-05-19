@@ -42,9 +42,9 @@ qslog.file = qslog/QsLogSharedLibrary.pro
 
 trikCommunicator.depends = trikScriptRunner trikNetwork qslog
 trikControl.depends = trikKernel trikHal qslog
-trikGui.depends = trikCommunicator trikScriptRunner trikWiFi trikKernel trikTelemetry qslog
+trikGui.depends = trikCommunicator trikScriptRunner trikWiFi trikKernel trikTelemetry trikNetwork qslog
 trikKernel.depends = qslog
-trikNetwork.depends = trikKernel qslog
+trikNetwork.depends = trikKernel trikControl qslog
 trikRun.depends = trikScriptRunner trikKernel qslog
 trikScriptRunner.depends = trikControl trikKernel trikNetwork qslog PythonQt
 trikServer.depends = trikCommunicator qslog
